@@ -1,5 +1,6 @@
 package com.cornor.gank.ui;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -22,6 +23,8 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String CATEGORY = "Category";
+    public static final String GIRLS = "Girls";
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.drawer_layout)
@@ -31,7 +34,7 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
-    AllFragment allFragment;
+    Fragment curFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +51,17 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        allFragment = new AllFragment();
+        AllFragment allFragment = new AllFragment();
 
-        if(allFragment != null){
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_body, allFragment,"Category");
-            fragmentTransaction.commit();
-        }
+        showFragment(allFragment, CATEGORY);
+    }
+
+    private void showFragment(Fragment fragment,String tag) {
+        curFragment = fragment;
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_body, fragment,tag);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -111,7 +117,27 @@ public class MainActivity extends AppCompatActivity
             type = "休息视频";
         }
         getSupportActionBar().setTitle(item.getTitle());
-        allFragment.change(type);
+        if(id == R.id.nav_girls){
+            if(!(curFragment instanceof PictureFragment)){
+                Fragment fragmentByTag = getFragmentManager().findFragmentByTag(GIRLS);
+                if(fragmentByTag != null){
+                    showFragment(fragmentByTag, GIRLS);
+                }else {
+                    showFragment(new PictureFragment(), GIRLS);
+                }
+            }
+        }else {
+            if(!(curFragment instanceof AllFragment)){
+                Fragment fragmentByTag = getFragmentManager().findFragmentByTag(CATEGORY);
+                if(fragmentByTag != null){
+                    showFragment(fragmentByTag, CATEGORY);
+                }else {
+                    showFragment(new AllFragment(),CATEGORY);
+                }
+            }else {
+                ((AllFragment)curFragment).change(type);
+            }
+        }
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
