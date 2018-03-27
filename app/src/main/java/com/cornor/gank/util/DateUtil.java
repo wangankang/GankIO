@@ -15,4 +15,9 @@ public class DateUtil {
         DateFormat dateFormat = new SimpleDateFormat("MM-dd");
         return dateFormat.format(date);
     }
+
+    public static String fromDateYMD(Date date){
+        DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
+        return dateFormat.format(date);
+    }
 }

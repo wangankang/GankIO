@@ -30,7 +30,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.BrowsePicActivity"></activity>
+        <activity
+            android:name=".ui.BrowsePicActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.DateContentActivity"
+            android:label="@string/title_activity_date_content"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.WebActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            ></activity>
     </application>
 
 </manifest>

@@ -1,8 +1,6 @@
 package com.cornor.gank.ui.view;
 
-import com.cornor.gank.model.pojo.GankData;
-
-import java.util.List;
+import com.cornor.gank.model.pojo.GankDateContent;
 
 /**
  * Desc:
@@ -10,9 +8,9 @@ import java.util.List;
  * Date:2018/3/7
  */
 
-public interface ICategoryView {
+public interface IDateView {
     void showRefresh();
     void hideRefresh();
-    void loadDataSuccess(List<GankData> data);
+    void loadDataSuccess(GankDateContent dateContent);
     void loadFail(String errMsg);
 }

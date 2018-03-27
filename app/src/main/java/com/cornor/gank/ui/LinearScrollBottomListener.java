@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
  */
 
 public abstract class LinearScrollBottomListener extends RecyclerView.OnScrollListener {
+    public static final int PRD_LOAD_SIZE = 6;
     private LinearLayoutManager linearLayoutManager;
     private int totalItemCount;
     private int lastTotalItemCount;
@@ -29,7 +30,7 @@ public abstract class LinearScrollBottomListener extends RecyclerView.OnScrollLi
                 isLoading = false;
             }
         }else{
-            if(firstVisibleItemIndex + visibleItemCount >= totalItemCount){
+            if(firstVisibleItemIndex + visibleItemCount >= totalItemCount - PRD_LOAD_SIZE){
                 isLoading = true;
                 lastTotalItemCount = totalItemCount;
                 onLoadMore(0);

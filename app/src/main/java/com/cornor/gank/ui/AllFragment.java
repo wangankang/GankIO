@@ -12,7 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.cornor.gank.R;
-import com.cornor.gank.model.pojo.GankCategory;
+import com.cornor.gank.model.OnToTopListener;
+import com.cornor.gank.model.pojo.GankData;
 import com.cornor.gank.presenter.GankPresenter;
 import com.cornor.gank.ui.adapeter.GankCategoryAdapter;
 import com.cornor.gank.ui.view.ICategoryView;
@@ -29,7 +30,7 @@ import butterknife.ButterKnife;
  * Date:2018/3/8
  */
 
-public class AllFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,ICategoryView{
+public class AllFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,ICategoryView,OnToTopListener{
 
     @BindView(R.id.sRLyt)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -38,7 +39,7 @@ public class AllFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
     GankCategoryAdapter gankCategoryAdapter;
     GankPresenter presenter;
-    List<GankCategory> categoryList;
+    List<GankData> categoryList;
     private int curPage = 1;
     private String type = "all";
     private boolean isLoadMore = false;
@@ -50,6 +51,17 @@ public class AllFragment extends Fragment implements SwipeRefreshLayout.OnRefres
             presenter = new GankPresenter(this);
         }
         categoryList = new ArrayList<>();
+        if(getArguments() != null){
+            type = getArguments().getString("type");
+        }
+    }
+
+    public static AllFragment newInstance(String type){
+        AllFragment allFragment = new AllFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("type",type);
+        allFragment.setArguments(bundle);
+        return allFragment;
     }
 
     @Nullable
@@ -58,10 +70,8 @@ public class AllFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         View view = inflater.inflate(R.layout.fragment_data,container,false);
         ButterKnife.bind(this,view);
         gankCategoryAdapter = new GankCategoryAdapter(getActivity(),categoryList);
-        gankCategoryAdapter.setOnGankItemClickListener(category -> {
-            Toast.makeText(getActivity(),"click",Toast.LENGTH_LONG).show();
-        });
         recyclerView.setAdapter(gankCategoryAdapter);
+        gankCategoryAdapter.setOnGankItemClickListener((category, clickView) -> getActivity().startActivity(WebActivity.newIntent(getActivity(), category.getUrl(), category.getDesc())));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         presenter.getCategoryData(type,curPage);
@@ -95,7 +105,7 @@ public class AllFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     }
 
     @Override
-    public void loadDataSuccess(List<GankCategory> data) {
+    public void loadDataSuccess(List<GankData> data) {
         if(!isLoadMore){
             categoryList.clear();
         }
@@ -113,5 +123,10 @@ public class AllFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     public void onRefresh() {
         curPage = 1;
         presenter.getCategoryData(type,curPage);
+    }
+
+    @Override
+    public void toTop() {
+        recyclerView.smoothScrollToPosition(0);
     }
 }

@@ -3,8 +3,8 @@ package com.cornor.gank.presenter;
 import android.util.Log;
 
 import com.cornor.gank.model.GankModel;
-import com.cornor.gank.model.pojo.GankCategory;
 import com.cornor.gank.model.pojo.GankData;
+import com.cornor.gank.model.pojo.GankList;
 import com.cornor.gank.ui.view.ICategoryView;
 
 import io.reactivex.Observer;
@@ -25,19 +25,19 @@ public class GankPresenter {
     }
 
     public void getCategoryData(String type,int page){
-        gankModel.getCategoryData(type, page, new Observer<GankData<GankCategory>>() {
+        gankModel.getCategoryData(type, page, new Observer<GankList<GankData>>() {
             @Override
             public void onSubscribe(Disposable d) {
                 Log.i("TAG","onSubscribe");
             }
 
             @Override
-            public void onNext(GankData<GankCategory> gankData) {
+            public void onNext(GankList<GankData> gankList) {
                 Log.i("TAG","TAG");
-                if(gankData.error){
+                if(gankList.error){
                    iCategoryView.loadFail("");
                 }else {
-                    iCategoryView.loadDataSuccess(gankData.results);
+                    iCategoryView.loadDataSuccess(gankList.results);
                 }
             }
 

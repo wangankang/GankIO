@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.cornor.gank.R;
-import com.cornor.gank.model.pojo.GankCategory;
+import com.cornor.gank.model.pojo.GankData;
 import com.cornor.gank.ui.widget.RatioImageView;
 
 import java.util.List;
@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
 
 public class GankGirlsAdapter extends RecyclerView.Adapter<GankGirlsAdapter.GirlsHolder> {
 
-    private List<GankCategory> list;
+    private List<GankData> list;
     private Context context;
     private GankCategoryAdapter.OnGankItemClickListener onGankItemClickListener;
 
@@ -33,7 +33,7 @@ public class GankGirlsAdapter extends RecyclerView.Adapter<GankGirlsAdapter.Girl
         this.onGankItemClickListener = onGankItemClickListener;
     }
 
-    public GankGirlsAdapter(Context context, List<GankCategory> list) {
+    public GankGirlsAdapter(Context context, List<GankData> list) {
         this.list = list;
         this.context = context;
     }
@@ -46,10 +46,10 @@ public class GankGirlsAdapter extends RecyclerView.Adapter<GankGirlsAdapter.Girl
 
     @Override
     public void onBindViewHolder(@NonNull GirlsHolder holder, int position) {
-        GankCategory gankCategory = list.get(position);
-        holder.category = gankCategory;
+        GankData gankData = list.get(position);
+        holder.category = gankData;
         Glide.with(context)
-                .load(gankCategory.getUrl())
+                .load(gankData.getUrl())
                 .into(holder.imgVGirls);
     }
 
@@ -64,7 +64,7 @@ public class GankGirlsAdapter extends RecyclerView.Adapter<GankGirlsAdapter.Girl
         @BindView(R.id.imgV_girls)
         RatioImageView imgVGirls;
         public GankCategoryAdapter.OnGankItemClickListener onGankItemClickListener;
-        public GankCategory category;
+        public GankData category;
 
         public GirlsHolder(View itemView,GankCategoryAdapter.OnGankItemClickListener onGankItemClickListener) {
             super(itemView);
@@ -77,7 +77,7 @@ public class GankGirlsAdapter extends RecyclerView.Adapter<GankGirlsAdapter.Girl
 
         @Override public void onClick(View v) {
             if(onGankItemClickListener != null){
-                onGankItemClickListener.OnItemClick(category);
+                onGankItemClickListener.OnItemClick(category,imgVGirls);
             }
         }
     }

@@ -6,7 +6,6 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.cornor.gank.R;
+import com.cornor.gank.model.OnToTopListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,17 +43,19 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        fab.setOnClickListener(view -> {
+            if(curFragment != null && (curFragment instanceof OnToTopListener)){
+                (((OnToTopListener) curFragment)).toTop();
+            }
+        });
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        AllFragment allFragment = new AllFragment();
 
-        showFragment(allFragment, CATEGORY);
+        showFragment(AllFragment.newInstance("all"), CATEGORY);
     }
 
     private void showFragment(Fragment fragment,String tag) {
@@ -88,7 +90,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_calendar) {
+            new SimpleCalendarDialogFragment().show(getSupportFragmentManager(), "calendar");
             return true;
         }
 
@@ -123,7 +126,7 @@ public class MainActivity extends AppCompatActivity
                 if(fragmentByTag != null){
                     showFragment(fragmentByTag, GIRLS);
                 }else {
-                    showFragment(new PictureFragment(), GIRLS);
+                    showFragment(PictureFragment.newInstance(), GIRLS);
                 }
             }
         }else {
@@ -132,7 +135,7 @@ public class MainActivity extends AppCompatActivity
                 if(fragmentByTag != null){
                     showFragment(fragmentByTag, CATEGORY);
                 }else {
-                    showFragment(new AllFragment(),CATEGORY);
+                    showFragment(AllFragment.newInstance(type),CATEGORY);
                 }
             }else {
                 ((AllFragment)curFragment).change(type);
