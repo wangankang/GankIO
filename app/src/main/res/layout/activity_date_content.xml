@@ -6,28 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.cornor.gank.ui.DateContentActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabLyt"
-            android:layout_width="match_parent"
-            android:scrollbars="horizontal"
-            app:tabMode="scrollable"
-            app:tabGravity="center"
-            android:layout_height="wrap_content"></android.support.design.widget.TabLayout>
-
-
-    </android.support.design.widget.AppBarLayout>
+    <include layout="@layout/layout_toolbar_tab"/>
 
     <include layout="@layout/content_date_content" />
 

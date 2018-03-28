@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.animation.DecelerateInterpolator;
 
@@ -17,25 +15,32 @@ import com.cornor.gank.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class BrowsePicActivity extends AppCompatActivity {
+public class BrowsePicActivity extends ToolbarActivity {
 
     @BindView(R.id.imgV_girl)
     AppCompatImageView imgVGirl;
     @BindView(R.id.app_bar_layout)
     AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
     String url;
 
     protected boolean mIsHidden = false;
 
     @Override
+    protected int contentViewResId() {
+        return R.layout.activity_browse_pic;
+    }
+
+
+    @Override
+    protected boolean canBack() {
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_browse_pic);
         ButterKnife.bind(this);
 
-        setSupportActionBar(mToolbar);
         ViewCompat.setTransitionName(imgVGirl, "girls");
 
         ActionBar actionBar = getSupportActionBar();

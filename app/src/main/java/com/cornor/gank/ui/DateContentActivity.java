@@ -2,13 +2,12 @@ package com.cornor.gank.ui;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.cornor.gank.R;
@@ -24,7 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DateContentActivity extends AppCompatActivity implements IDateView{
+public class DateContentActivity extends ToolbarActivity implements IDateView{
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -34,6 +33,8 @@ public class DateContentActivity extends AppCompatActivity implements IDateView{
     ProgressBar progressBar;
     @BindView(R.id.rcyCV)
     RecyclerView recyclerView;
+    @BindView(R.id.empty_lyt)
+    FrameLayout layoutEmpty;
 
     String date;
     GankDatePresenter presenter;
@@ -42,16 +43,20 @@ public class DateContentActivity extends AppCompatActivity implements IDateView{
     GankDateContent dateContent;
 
     @Override
+    protected int contentViewResId() {
+        return R.layout.activity_date_content;
+    }
+
+    @Override
+    protected boolean canBack() {
+        return true;
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_date_content);
         ButterKnife.bind(this);
-
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null){
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
 
         if(presenter == null){
             presenter = new GankDatePresenter(this);
@@ -60,9 +65,10 @@ public class DateContentActivity extends AppCompatActivity implements IDateView{
         adapter = new GankDateAdapter(this,gankDataList);
         adapter.setOnGankItemClickListener((category, view) -> startActivity(WebActivity.newIntent(DateContentActivity.this, category.getUrl(), category.getDesc())));
         date = getIntent().getStringExtra("date");
-        actionBar.setTitle(date);
+        getSupportActionBar().setTitle(date);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
 
@@ -82,7 +88,7 @@ public class DateContentActivity extends AppCompatActivity implements IDateView{
 
             }
         });
-
+        layoutEmpty.setVisibility(View.GONE);
         presenter.getDateContent(date);
     }
 
@@ -126,6 +132,7 @@ public class DateContentActivity extends AppCompatActivity implements IDateView{
             default:
                 break;
         }
+
         adapter.notifyDataSetChanged();
     }
 
@@ -160,8 +167,10 @@ public class DateContentActivity extends AppCompatActivity implements IDateView{
             tabLayout.addTab(tabLayout.newTab().setText(tab));
         }
         if(tabLayout.getTabCount() > 0){
+            tabLayout.setVisibility(View.VISIBLE);
             fillData(dateContent.category.get(tabLayout.getSelectedTabPosition()));
         }else {
+            layoutEmpty.setVisibility(View.VISIBLE);
             tabLayout.setVisibility(View.GONE);
         }
     }

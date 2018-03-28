@@ -9,8 +9,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -20,13 +18,11 @@ import com.cornor.gank.model.OnToTopListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends ToolbarActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String CATEGORY = "Category";
     public static final String GIRLS = "Girls";
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.nav_view)
@@ -37,11 +33,15 @@ public class MainActivity extends AppCompatActivity
     Fragment curFragment;
 
     @Override
+    protected int contentViewResId() {
+        return R.layout.activity_main;
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
 
         fab.setOnClickListener(view -> {
             if(curFragment != null && (curFragment instanceof OnToTopListener)){

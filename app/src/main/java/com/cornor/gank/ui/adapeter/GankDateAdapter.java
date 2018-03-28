@@ -23,6 +23,9 @@ import butterknife.ButterKnife;
 
 public class GankDateAdapter extends RecyclerView.Adapter<GankDateAdapter.DateContentHolder> {
 
+    public static final int VIEW_TYPE_ITEM  = 0;
+    public static final int VIEW_TYPE_EMPTY  = 1;
+
     private List<GankData> list;
     private Context context;
     private OnGankItemClickListener onGankItemClickListener;
@@ -39,6 +42,8 @@ public class GankDateAdapter extends RecyclerView.Adapter<GankDateAdapter.DateCo
         this.list = list;
         this.context = context;
     }
+
+
     @Override
     public GankDateAdapter.DateContentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context)
@@ -56,7 +61,11 @@ public class GankDateAdapter extends RecyclerView.Adapter<GankDateAdapter.DateCo
 
     @Override
     public int getItemCount() {
-        return list != null ? list.size() : 0;
+        if(list == null){
+           return 0;
+        }
+        return list.size();
+
     }
 
     static class DateContentHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
