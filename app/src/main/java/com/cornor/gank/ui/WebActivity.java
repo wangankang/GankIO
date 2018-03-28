@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -24,7 +21,7 @@ import com.cornor.gank.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class WebActivity extends AppCompatActivity {
+public class WebActivity extends ToolbarActivity {
 
     private static final String WEB_URL = "web_url";
     private static final String WEB_TITLE = "web_title";
@@ -33,19 +30,25 @@ public class WebActivity extends AppCompatActivity {
     private String mTitle = "";
     @BindView(R.id.webView)
     WebView mWebView;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
     @BindView(R.id.prg_bar)
     ProgressBar progressBar;
     @BindView(R.id.title)
     TextSwitcher textSwitcher;
 
     @Override
+    protected int contentViewResId() {
+        return R.layout.activity_web;
+    }
+
+    @Override
+    protected boolean canBack() {
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_web);
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
 
         mUrl = getIntent().getStringExtra(WEB_URL);
         mTitle = getIntent().getStringExtra(WEB_TITLE);
@@ -60,11 +63,6 @@ public class WebActivity extends AppCompatActivity {
         mWebView.setWebViewClient(new LoveClient());
 
         getSupportActionBar().setTitle(mTitle);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null){
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24dp);
-        }
         progressBar.setVisibility(View.VISIBLE);
         mWebView.loadUrl(mUrl);
 

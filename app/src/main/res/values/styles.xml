@@ -13,7 +13,7 @@
         <item name="colorControlNormal">#FFFFFF</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
